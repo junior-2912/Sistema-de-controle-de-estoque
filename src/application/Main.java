@@ -7,8 +7,8 @@ import entities.Produto;
 import services.ServicoEstoque;
 
 public class Main {
-    // Classe pra controlar o menu de opcoes e mandar os dados para os metodos da
-    // classe de servico.
+    // Classe para controlar o menu de opções e mandar os dados para os métodos da
+    // classe de serviço.
     public static void main(String[] args) {
         Scanner entrada = new Scanner(System.in);
         ServicoEstoque servicoEstoque = new ServicoEstoque();
@@ -32,7 +32,7 @@ public class Main {
                 switch (indice) {
                     case 1 -> {
                         System.out.println("---CADASTRO DE PRODUTO---");
-                        // Limpando o buffer do scanner.
+                        // Limpando o ‘buffer’ do scanner.
                         entrada.nextLine();
                         System.out.print("Digite o nome do produto: ");
                         String nome = entrada.nextLine();
@@ -122,7 +122,11 @@ public class Main {
                         }
                     }
                     case 8 -> {
+                        System.out.println("---VALOR TOTAL DO ESTOQUE---");
+                        double valorTotal = servicoEstoque.valorTotalEstoque();
+                        System.out.printf("%.2f", valorTotal);
                         System.out.println();
+                        System.out.println("------------------------------");
                     }
 
                     case 10 -> {

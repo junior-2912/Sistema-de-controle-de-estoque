@@ -13,17 +13,15 @@ public class ServicoEstoque {
     public void cadastrarProdutos(Produto produto) {
         Produto produtoBuscado = buscarProdutoPorId(produto.getId());
         if (produtoBuscado == null) {
-            if (produto != null) {
-                produtos.add(produto);
-                System.out.println("Produto adicionado ao catalogo!");
-            }
+            produtos.add(produto);
+            System.out.println("Produto adicionado ao catalogo!");
         } else {
             System.out.println("Ja existe um produto com esse ID!");
         }
     }
 
     public void listarProdutos() {
-        produtos.forEach(produto -> System.out.println(produto));
+        produtos.forEach(System.out::println);
     }
 
     public Produto buscarProdutoPorId(String id) {
@@ -61,9 +59,8 @@ public class ServicoEstoque {
 
     public Produto produtoMaisCaro() {
         Optional<Produto> produtoOptional = produtos.stream().max(Comparator.comparing(Produto::getPreco));
-        Produto produto = produtoOptional.orElse(null);
 
-        return produto;
+        return produtoOptional.orElse(null);
     }
 
     public Produto produtoMaiorQuantidade() {
@@ -79,4 +76,9 @@ public class ServicoEstoque {
                 .sum();
         return valorTotal;
     }
+
+    public List<Produto> ordenarPorPreco() {
+
+    }
+
 }
