@@ -1,20 +1,24 @@
 package services;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import entities.Produto;
-import exceptions.EstoqueNegativoException;
 
 public class ServicoEstoque {
-    List<Produto> produtos = new ArrayList<>();
+    private List<Produto> produtos = new ArrayList<>();
 
     public void cadastrarProdutos(Produto produto) {
-        if (produto != null) {
-            produtos.add(produto);
-            System.out.println("Produto adicionado ao catalogo!");
+        Produto produtoBuscado = buscarProdutoPorId(produto.getId());
+        if (produtoBuscado == null) {
+            if (produto != null) {
+                produtos.add(produto);
+                System.out.println("Produto adicionado ao catalogo!");
+            }
         } else {
-            throw new NullPointerException("Produto nao pode ser vazio!");
+            System.out.println("Ja existe um produto com esse ID!");
         }
     }
 
@@ -31,24 +35,48 @@ public class ServicoEstoque {
         return null;
     }
 
-    public void entradaProduto(Produto produto, int quantidade) {
+    public boolean entradaProduto(Produto produto, int quantidade) {
         if (quantidade > 0) {
             produto.setQuantidade(produto.getQuantidade() + quantidade);
-            System.out.println("Foi dado entrada de " + quantidade + " unidades!");
+            return true;
         } else {
             System.out.println("Quantidade deve ser maior que 0!");
+            return false;
         }
     }
 
-    public void saidaProduto(Produto produto, int quantidade) {
-        if (produto.getQuantidade() <= quantidade) {
-            throw new EstoqueNegativoException("A quantidade é maior que o estoque!");
+    public boolean saidaProduto(Produto produto, int quantidade) {
+        if (quantidade > produto.getQuantidade()) {
+            System.out.println("A quantidade é maior que o estoque!");
+            return false;
         }
         if (quantidade > 0) {
             produto.setQuantidade(produto.getQuantidade() - quantidade);
-            System.out.println("Foi dado saida de " + quantidade + " unidades!");
+            return true;
         } else {
             System.out.println("Digite um numero maior que 0!");
+            return false;
         }
+    }
+
+    public Produto produtoMaisCaro() {
+        Optional<Produto> produtoOptional = produtos.stream().max(Comparator.comparing(Produto::getPreco));
+        Produto produto = produtoOptional.orElse(null);
+
+        return produto;
+    }
+
+    public Produto produtoMaiorQuantidade() {
+        Produto produto = produtos.stream()
+                .max(Comparator.comparing(Produto::getQuantidade))
+                .orElse(null);
+        return produto;
+    }
+
+    public double valorTotalEstoque() {
+        double valorTotal = produtos.stream()
+                .mapToDouble(produto -> produto.getPreco() * produto.getQuantidade())
+                .sum();
+        return valorTotal;
     }
 }

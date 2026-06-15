@@ -21,7 +21,11 @@ public class Main {
                 System.out.println("3 - Entrada de produto");
                 System.out.println("4 - Saida de produto");
                 System.out.println("5 - Busca de produto por ID");
-                System.out.println("6 - Sair do menu");
+                System.out.println("6 - Produto mais caro");
+                System.out.println("7 - Produto com maior estoque");
+                System.out.println("8 - Valor total do estoque");
+                System.out.println("9 - Ordenar por preço");
+                System.out.println("10 - Sair do menu");
 
                 int indice = entrada.nextInt();
                 System.out.println();
@@ -39,6 +43,7 @@ public class Main {
                         // Insere todos os dados do produto e chama o metodo para cadastra-lo.
                         Produto produto = new Produto(id, nome, preco);
                         servicoEstoque.cadastrarProdutos(produto);
+
                         System.out.println("---FIM DO CADASTRO---");
                     }
                     case 2 -> {
@@ -57,7 +62,9 @@ public class Main {
 
                         Produto produto = servicoEstoque.buscarProdutoPorId(id);
                         if (produto != null) {
-                            servicoEstoque.entradaProduto(produto, quantidade);
+                            if (servicoEstoque.entradaProduto(produto, quantidade)) {
+                                System.out.println("Foi dado entrada de " + quantidade + " unidades!");
+                            }
                         } else {
                             System.out.println("Produto nao encontrado!");
                         }
@@ -73,7 +80,9 @@ public class Main {
 
                         Produto produto = servicoEstoque.buscarProdutoPorId(id);
                         if (produto != null) {
-                            servicoEstoque.saidaProduto(produto, quantidade);
+                            if (servicoEstoque.saidaProduto(produto, quantidade)) {
+                                System.out.println("Foi dado saida de " + quantidade + " unidades!");
+                            }
                         } else {
                             System.out.println("Produto nao encontrado!");
                         }
@@ -94,23 +103,44 @@ public class Main {
                         }
 
                     }
+
                     case 6 -> {
+                        System.out.println("---PRODUTO MAIS CARO---");
+                        System.out.println();
+                        Produto produtoMaisCaro = servicoEstoque.produtoMaisCaro();
+                        if (produtoMaisCaro != null) {
+                            System.out.println(produtoMaisCaro.getNome());
+                        }
+                        System.out.println("------------------------");
+                    }
+                    case 7 -> {
+                        System.out.println("---PRODUTO COM MAIOR ESTOQUE---");
+                        System.out.println();
+                        Produto produto = servicoEstoque.produtoMaiorQuantidade();
+                        if (produto != null) {
+                            System.out.println(produto.getNome());
+                        }
+                    }
+                    case 8 -> {
+                        System.out.println();
+                    }
+
+                    case 10 -> {
                         System.out.println("Adeus! Fechando o programa...");
                         entrada.close();
-                        break;
+                        return;
                     }
 
                     default -> {
                         System.out.println("Digite um numero valido!");
-                        continue;
+                        break;
                     }
 
                 }
             }
         } catch (InputMismatchException e) {
-            System.out.println("Digite apenas numeros!");
+            System.out.println("Digite apenas o que é requerido!");
             return;
         }
-        
     }
 }
