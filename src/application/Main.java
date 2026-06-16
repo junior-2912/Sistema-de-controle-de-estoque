@@ -1,6 +1,7 @@
 package application;
 
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import entities.Produto;
@@ -25,7 +26,8 @@ public class Main {
                 System.out.println("7 - Produto com maior estoque");
                 System.out.println("8 - Valor total do estoque");
                 System.out.println("9 - Ordenar por preço");
-                System.out.println("10 - Sair do menu");
+                System.out.println("10 - Remover produto");
+                System.out.println("11 - Sair do menu");
 
                 int indice = entrada.nextInt();
                 System.out.println();
@@ -120,6 +122,7 @@ public class Main {
                         if (produto != null) {
                             System.out.println(produto.getNome());
                         }
+                        System.out.println("------------------------");
                     }
                     case 8 -> {
                         System.out.println("---VALOR TOTAL DO ESTOQUE---");
@@ -128,8 +131,27 @@ public class Main {
                         System.out.println();
                         System.out.println("------------------------------");
                     }
-
+                    case 9 ->  {
+                        System.out.println("---PRODUTOS ORDENADOS---");
+                        List<Produto> produtosOrdenados = servicoEstoque.ordenarPorPreco();
+                        produtosOrdenados.forEach(System.out::println);
+                        System.out.println("---------------------------");
+                    }
                     case 10 -> {
+                        System.out.println("---REMOÇÃO DE PRODUTOS---");
+                        entrada.nextLine();
+                        System.out.print("Digite o ID do produto: ");
+                        String id = entrada.nextLine();
+
+                        Produto produto = servicoEstoque.buscarProdutoPorId(id);
+                        if (produto != null) {
+                            System.out.println("Produto a ser removido: " + produto);
+                            if(servicoEstoque.removerProduto(produto)) System.out.println("Produto removido!");
+                        }
+                        System.out.println("--------------------------");
+                    }
+
+                    case 11 -> {
                         System.out.println("Adeus! Fechando o programa...");
                         entrada.close();
                         return;

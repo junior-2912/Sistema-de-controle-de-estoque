@@ -78,7 +78,13 @@ public class ServicoEstoque {
     }
 
     public List<Produto> ordenarPorPreco() {
-
+        return produtos.stream()
+                .sorted(Comparator.comparing(Produto::getPreco))
+                .toList();
     }
 
+    public boolean removerProduto(Produto produto) {
+        produtos.remove(produto);
+        return true;
+    }
 }
